@@ -1,10 +1,29 @@
 problem
 =======
 
+Send SMS or email based on piped in text from other programs.
+
+Config - problem.json
 ````
-var problem = require('./problem.js');
+{
 
-problem.email('me@dpsww.info', 'me@dpsww.info', 'subject', 'body');
-problem.sms('14777540980', 'body');
+  "_": {
+     "^mail": {
+        "to": "^mail\:([^\s]*)",
+        "body": "body\:(.*)" 
+     }
+  },
 
+  "Mailgun": {
+    "user": "",
+    "password": ""
+  },
+
+  "Nexmo": {
+     "mynumber": "",
+	 "key": "",
+	 "secret": ""
+  } 
+
+}
 ````

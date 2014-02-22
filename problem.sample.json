@@ -1,0 +1,21 @@
+{
+
+  "_": {
+     "^mail": {
+        "to": "^mail\\:([^\\s]*)",
+        "body": "body\\:(.*)" 
+     }
+  },
+
+  "Mailgun": {
+    "user": "",
+    "password": ""
+  },
+
+  "Nexmo": {
+    "mynumber": "",
+    "key": "",
+    "secret": ""
+  }
+
+}
