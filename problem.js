@@ -1,13 +1,6 @@
 #!/usr/bin/env node
 var settings = require('./problem.json');
 
-process.stdin.on('readable', function(chunk) {
-  var chunk = process.stdin.read();
-  if (chunk !== null) {
-    ex(chunk.toString().replace(/\'/g, '"')); // correct for JSON
-  }
-});
-
 if(settings.Mailgun){
   var Mailgun = require('mailgun').Mailgun;
   var mg = new Mailgun(settings.Mailgun); 
@@ -40,4 +33,22 @@ function ex(msg){
         sendmail(mail.from || 'admin', mail.to, mail.subject || 'Problem alert', mail.body);
     }
 	}
+}
+
+if(process.argv.length < 2){
+
+  process.stdin.on('readable', function(chunk) {
+    var chunk = process.stdin.read();
+    if (chunk !== null) {
+      ex(chunk.toString().replace(/\'/g, '"')); // correct for JSON
+    }
+  });
+
+} else {
+  if(process.argv[2] == 'sms'){
+    sendsms(process.argv[3], process.argv[4]);
+  }
+  if(process.argv[2] == 'mail'){
+    sendmail('admin', process.argv[3], process.argv[4], process.argv[5]);
+  }
 }
