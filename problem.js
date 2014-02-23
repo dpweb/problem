@@ -2,12 +2,12 @@
 var settings = require('./problem.json');
 
 if(settings.Mailgun){
-  var Mailgun = require('mailgun').Mailgun;
-  var mg = new Mailgun(settings.Mailgun); 
-  var sendmail = function(f, t, s, b){
-    console.log(arguments)
-    mg.sendText(f, [t], s, b, {'X-Campaign-Id': '0'},
-      function(err) { err && console.log(err) });
+  var mailgun = require('Mailgun');
+  var mg = new mailgun.Mailgun(settings.Mailgun.api_key);
+
+  var sendmail = function(t, b, s){
+    mg.sendText('admin@example.com', [t], 'Alert', b, {'X-Campaign-Id': 'something'},
+         function(err) { err && console.log(err) });
   }
 }
 
@@ -23,32 +23,23 @@ function ex(msg){
 	for(i in settings._){
 	  if(msg.match(RegExp(i))){
 	  	console.log('match', settings._[i]);
-      var mail = {};
-      mail.to = msg.match(RegExp(settings._[i].to))[1];
-      mail.body = msg.match(RegExp(settings._[i].body))[1];
-      console.log(settings._[i].action, mail.to, mail.body);
-      if(settings._[i].action == 'SMS')
-        sendsms(mail.to, mail.body);
-      if(settings._[i].action == 'MAIL')
-        sendmail(mail.from || 'admin', mail.to, mail.subject || 'Problem alert', mail.body);
+      var msgt = {
+         to: msg.match(RegExp(settings._[i].to))[1],
+         body: msg.match(RegExp(settings._[i].body))[1]
+      }
+
+      console.log(settings._[i].action, msgt);
+      if(settings._[i].action == 'MSG'){
+         (msgt.to.match('@') ? sendmail:sendsms)(msgt.to, msgt.body);
+      }
+
     }
 	}
 }
 
-if(process.argv.length < 2){
-
-  process.stdin.on('readable', function(chunk) {
-    var chunk = process.stdin.read();
-    if (chunk !== null) {
-      ex(chunk.toString().replace(/\'/g, '"')); // correct for JSON
-    }
-  });
-
-} else {
-  if(process.argv[2] == 'sms'){
-    sendsms(process.argv[3], process.argv[4]);
+process.stdin.on('readable', function(chunk) {
+  var chunk = process.stdin.read();
+  if (chunk !== null) {
+    ex(chunk.toString().replace(/\'/g, '"')); // correct for JSON
   }
-  if(process.argv[2] == 'mail'){
-    sendmail('admin', process.argv[3], process.argv[4], process.argv[5]);
-  }
-}
+});
