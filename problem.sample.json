@@ -9,6 +9,7 @@
 
   "Mailgun": {
     "from": "",
+    "subject": "",
     "user": "",
     "password": ""
   },
