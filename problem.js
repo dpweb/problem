@@ -20,21 +20,8 @@ if(settings.Nexmo){
 }
 
 function ex(msg){
-	for(i in settings._){
-	  if(msg.match(RegExp(i))){
-	  	console.log('match', settings._[i]);
-      var msgt = {
-         to: msg.match(RegExp(settings._[i].to))[1],
-         body: msg.match(RegExp(settings._[i].body))[1]
-      }
-
-      console.log(settings._[i].action, msgt);
-      if(settings._[i].action == 'MSG'){
-         (msgt.to.match('@') ? sendmail:sendsms)(msgt.to, msgt.body);
-      }
-
-    }
-	}
+      var arr = msg.split(';');
+      (arr[0].match('@') ? sendmail:sendsms)(arr[0], arr[1]);
 }
 
 process.stdin.on('readable', function(chunk) {
