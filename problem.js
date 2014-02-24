@@ -6,7 +6,7 @@ if(settings.Mailgun){
   var mg = new mailgun.Mailgun(settings.Mailgun.api_key);
 
   var sendmail = function(t, b, s){
-    mg.sendText('admin@example.com', [t], 'Alert', b, {'X-Campaign-Id': 'something'},
+    mg.sendText(settings.Mailgun.from, [t], settings.Mailgun.subject, b, {'X-Campaign-Id': 'something'},
          function(err) { err && console.log(err) });
   }
 }
