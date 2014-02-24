@@ -1,15 +1,8 @@
 {
 
-  "_": {
-     "^mail": {
-        "to": "^mail\\:([^\\s]*)",
-        "body": "body\\:(.*)" 
-     }
-  },
-
   "Mailgun": {
-    "from": "",
-    "subject": "",
+    "from": "admin@example.com",
+    "subject": "Alert!",
     "user": "",
     "password": ""
   },
