@@ -20,6 +20,9 @@ if(settings.Nexmo){
 }
 
 function ex(msg){
+      if(process.argv.length === 3){
+        msg = process.argv[2] + ';' + msg;
+      }
       var arr = msg.split(';');
       (arr[0].match('@') ? sendmail:sendsms)(arr[0], arr[1]);
 }
